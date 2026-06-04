@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>La Pastelería • Dulces Momentos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream:#fdf6ee; --rose:#e8a0a0; --rose-dark:#c96b6b;
+      --brown:#5a3825; --caramel:#d4843e; --sage:#9aaa8e;
+      --text:#3a2318; --muted:#9a7b68; --white:#fff;
+      --shadow: 0 4px 24px rgba(90,56,37,.10);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--cream);font-family:'DM Sans',sans-serif;color:var(--text);overflow-x:hidden}
+
+    /* ── NAV ── */
+    nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 3rem;background:white;box-shadow:0 2px 12px rgba(90,56,37,.07);position:sticky;top:0;z-index:200}
+    .logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--brown)}
+    .logo span{color:var(--rose-dark);font-style:italic}
+    nav ul{list-style:none;display:flex;gap:2rem}
+    nav ul a{text-decoration:none;color:var(--muted);font-size:.85rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;transition:color .2s}
+    nav ul a:hover{color:var(--rose-dark)}
+    .cart-btn{position:relative;background:var(--brown);color:white;border:none;padding:.65rem 1.3rem;border-radius:30px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;gap:.5rem}
+    .cart-btn:hover{background:var(--caramel);transform:translateY(-1px)}
+    .cart-count{background:var(--rose-dark);color:white;border-radius:50%;width:20px;height:20px;font-size:.72rem;display:flex;align-items:center;justify-content:center;font-weight:700;transition:transform .2s}
+    .cart-count.bump{transform:scale(1.4)}
+
+    /* ── HERO ── */
+    .hero{min-height:75vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:4rem 3rem 4rem 5rem;gap:3rem;background:linear-gradient(135deg,#fff9f4,#fdf0e2);overflow:hidden;position:relative}
+    .hero::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,#fce8d8,transparent 70%);top:-100px;right:-100px;pointer-events:none}
+    .hero-eyebrow{display:inline-block;background:var(--rose);color:white;font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .9rem;border-radius:20px;margin-bottom:1.2rem}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,4.5vw,4rem);line-height:1.1;color:var(--brown);margin-bottom:1rem}
+    .hero h1 em{color:var(--rose-dark);font-style:italic}
+    .hero p{color:var(--muted);line-height:1.75;max-width:420px;margin-bottom:2rem}
+    .btn{display:inline-block;padding:.85rem 2rem;background:var(--brown);color:white;font-weight:600;font-size:.9rem;border-radius:50px;text-decoration:none;transition:background .25s,transform .2s;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+    .btn:hover{background:var(--caramel);transform:translateY(-2px)}
+    .cake-circle{width:300px;height:300px;background:linear-gradient(145deg,#f7d9c4,#f0b89a);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8rem;box-shadow:0 30px 80px rgba(90,56,37,.15),0 0 0 16px rgba(247,217,196,.3);margin:0 auto}
+
+    /* ── FILTERS ── */
+    .section-header{text-align:center;padding:4rem 2rem 2rem}
+    .section-header h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.6rem);color:var(--brown);margin-bottom:.5rem}
+    .section-header p{color:var(--muted);max-width:480px;margin:0 auto}
+    .filters{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;padding:.5rem 2rem 2rem}
+    .filter-btn{padding:.5rem 1.3rem;border:2px solid #e8d8cc;background:white;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;border-radius:30px;cursor:pointer;transition:all .2s}
+    .filter-btn:hover,.filter-btn.active{background:var(--brown);border-color:var(--brown);color:white}
+
+    /* ── CATALOG ── */
+    .catalog{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.8rem;padding:0 3.5rem 5rem;max-width:1300px;margin:0 auto}
+    .card{background:white;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s;animation:fadeUp .5s ease both}
+    .card:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(90,56,37,.14)}
+    .card-img{height:180px;display:flex;align-items:center;justify-content:center;font-size:4.5rem;position:relative}
+    .card-badge{position:absolute;top:10px;left:10px;background:var(--rose-dark);color:white;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.28rem .75rem;border-radius:20px}
+    .card-body{padding:1.2rem 1.4rem 1.5rem}
+    .card-cat{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--caramel);margin-bottom:.2rem}
+    .card h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--brown);margin-bottom:.4rem}
+    .card p{font-size:.84rem;color:var(--muted);line-height:1.6;margin-bottom:1rem}
+    .stars-row{display:flex;align-items:center;gap:.4rem;margin-bottom:.8rem;font-size:.8rem}
+    .stars{color:#f5b942}
+    .star-count{color:var(--muted)}
+    .card-footer{display:flex;align-items:center;justify-content:space-between;gap:.8rem}
+    .price{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--brown);font-weight:700}
+    .qty-ctrl{display:flex;align-items:center;gap:.4rem;background:#f5ede6;border-radius:30px;padding:.25rem .4rem}
+    .qty-btn{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--brown);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .15s;font-weight:700}
+    .qty-btn:hover{background:var(--rose)}
+    .qty-num{font-size:.9rem;font-weight:600;color:var(--brown);min-width:18px;text-align:center}
+    .add-btn{background:var(--rose-dark);color:white;border:none;padding:.55rem 1.1rem;border-radius:30px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;white-space:nowrap}
+    .add-btn:hover{background:var(--brown);transform:scale(1.03)}
+
+    /* ── REVIEWS modal ── */
+    .review-toggle{background:none;border:none;color:var(--caramel);font-size:.78rem;font-weight:600;cursor:pointer;padding:0;margin-top:.3rem;display:block;text-decoration:underline dotted;font-family:'DM Sans',sans-serif}
+    .review-toggle:hover{color:var(--rose-dark)}
+
+    /* ── CART SIDEBAR ── */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;opacity:0;pointer-events:none;transition:opacity .3s}
+    .overlay.open{opacity:1;pointer-events:all}
+    .cart-sidebar{position:fixed;right:0;top:0;bottom:0;width:min(420px,100vw);background:white;z-index:400;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.12)}
+    .cart-sidebar.open{transform:translateX(0)}
+    .cart-header{display:flex;align-items:center;justify-content:space-between;padding:1.5rem 1.8rem;border-bottom:1px solid #f0e6dd}
+    .cart-header h2{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--brown)}
+    .close-btn{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted);line-height:1}
+    .close-btn:hover{color:var(--brown)}
+    .cart-items{flex:1;overflow-y:auto;padding:1.2rem 1.8rem;display:flex;flex-direction:column;gap:1rem}
+    .cart-empty{text-align:center;padding:3rem 1rem;color:var(--muted)}
+    .cart-empty span{font-size:3.5rem;display:block;margin-bottom:1rem}
+    .cart-item{display:flex;align-items:center;gap:1rem;padding:1rem;background:#fdf6ee;border-radius:14px}
+    .cart-item-emoji{font-size:2.2rem;width:52px;height:52px;background:#f0e0d0;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .cart-item-info{flex:1;min-width:0}
+    .cart-item-info h4{font-family:'Playfair Display',serif;font-size:.95rem;color:var(--brown);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .cart-item-info p{font-size:.8rem;color:var(--caramel);font-weight:600}
+    .cart-item-qty{display:flex;align-items:center;gap:.4rem;background:white;border-radius:20px;padding:.2rem .3rem}
+    .cart-item-qty button{background:none;border:none;cursor:pointer;font-size:.9rem;font-weight:700;color:var(--brown);width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .15s}
+    .cart-item-qty button:hover{background:var(--rose)}
+    .cart-item-qty span{font-size:.85rem;font-weight:600;min-width:16px;text-align:center}
+    .remove-item{background:none;border:none;cursor:pointer;color:#ccc;font-size:1rem;padding:.2rem;transition:color .15s}
+    .remove-item:hover{color:var(--rose-dark)}
+    .cart-footer{padding:1.5rem 1.8rem;border-top:1px solid #f0e6dd;display:flex;flex-direction:column;gap:1rem}
+    .cart-total-row{display:flex;justify-content:space-between;align-items:center}
+    .cart-total-row span{color:var(--muted);font-size:.9rem}
+    .cart-total-row strong{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--brown)}
+    .checkout-btn{width:100%;padding:1rem;background:var(--brown);color:white;border:none;border-radius:40px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:background .2s}
+    .checkout-btn:hover{background:var(--caramel)}
+
+    /* ── MODAL RESEÑAS ── */
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
+    .modal-bg.open{display:flex}
+    .modal{background:white;border-radius:24px;width:min(560px,100%);max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}
+    .modal-head{padding:1.5rem 1.8rem 1rem;border-bottom:1px solid #f0e6dd;display:flex;align-items:center;justify-content:space-between}
+    .modal-head h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--brown)}
+    .modal-body{padding:1.4rem 1.8rem;display:flex;flex-direction:column;gap:1.2rem}
+    .review-card{background:#fdf6ee;border-radius:14px;padding:1rem 1.2rem}
+    .review-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem}
+    .review-author{font-weight:600;color:var(--brown);font-size:.9rem}
+    .review-date{font-size:.75rem;color:var(--muted)}
+    .review-stars{color:#f5b942;font-size:.85rem;margin-bottom:.3rem}
+    .review-text{font-size:.85rem;color:var(--muted);line-height:1.6}
+    .review-form{background:#fff9f4;border:2px dashed #e8d8cc;border-radius:16px;padding:1.4rem}
+    .review-form h4{font-family:'Playfair Display',serif;color:var(--brown);margin-bottom:1rem;font-size:1rem}
+    .form-group{margin-bottom:.9rem}
+    .form-group label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.06em}
+    .form-group input,.form-group textarea{width:100%;padding:.65rem .9rem;border:1.5px solid #e8d8cc;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);background:white;transition:border-color .2s;resize:none}
+    .form-group input:focus,.form-group textarea:focus{outline:none;border-color:var(--rose-dark)}
+    .star-picker{display:flex;gap:.3rem;font-size:1.6rem;cursor:pointer;user-select:none}
+    .star-picker span{transition:transform .1s;color:#ddd}
+    .star-picker span.lit{color:#f5b942}
+    .star-picker span:hover{transform:scale(1.2)}
+    .submit-review{background:var(--rose-dark);color:white;border:none;padding:.7rem 1.8rem;border-radius:30px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:background .2s}
+    .submit-review:hover{background:var(--brown)}
+    .no-reviews{text-align:center;color:var(--muted);padding:1.5rem;font-size:.9rem}
+
+    /* ── CHECKOUT MODAL ── */
+    .checkout-modal{width:min(480px,100%)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+
+    /* ── TOAST ── */
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--brown);color:white;padding:.75rem 1.6rem;border-radius:30px;font-size:.88rem;font-weight:500;opacity:0;pointer-events:none;transition:all .3s;z-index:600;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    /* ── FEATURES ── */
+    .features{background:var(--brown);color:white;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+    .feature{padding:2.2rem 1.5rem;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+    .feature:last-child{border-right:none}
+    .feature-icon{font-size:2rem;margin-bottom:.6rem}
+    .feature h4{font-family:'Playfair Display',serif;font-size:.95rem;margin-bottom:.3rem}
+    .feature p{font-size:.8rem;opacity:.6;line-height:1.5}
+
+    footer{background:#2e1a0f;color:rgba(255,255,255,.55);text-align:center;padding:1.8rem;font-size:.82rem}
+    footer strong{color:rgba(255,255,255,.85)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .card:nth-child(1){animation-delay:.04s}.card:nth-child(2){animation-delay:.08s}
+    .card:nth-child(3){animation-delay:.12s}.card:nth-child(4){animation-delay:.16s}
+    .card:nth-child(5){animation-delay:.20s}.card:nth-child(6){animation-delay:.24s}
+    .card:nth-child(7){animation-delay:.28s}.card:nth-child(8){animation-delay:.32s}
+
+    @media(max-width:768px){
+      .hero{grid-template-columns:1fr;padding:2.5rem 1.5rem;text-align:center}
+      .hero p{margin:0 auto 1.8rem}
+      .hero-image-wrap{display:none}
+      nav ul{display:none}
+      .catalog{padding:0 1.2rem 4rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">La <span>Pastelería</span></div>
+  <ul>
+    <li><a href="#catalogo">Catálogo</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+  </ul>
+  <button class="cart-btn" onclick="toggleCart()">
+    🛒 Carrito
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <span class="hero-eyebrow">✦ Hecho con amor</span>
+    <h1>Pasteles que <em>enamoran</em> desde el primer bocado</h1>
+    <p>Ingredientes frescos, recetas artesanales y mucho cariño en cada creación. Para tu ocasión especial.</p>
+    <a href="#catalogo" class="btn">Ver catálogo</a>
+  </div>
+  <div class="hero-image-wrap" style="display:flex;justify-content:center">
+    <div class="cake-circle">🎂</div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<div class="features">
+  <div class="feature"><div class="feature-icon">🌾</div><h4>Ingredientes naturales</h4><p>Sin conservantes ni artificiales</p></div>
+  <div class="feature"><div class="feature-icon">🚚</div><h4>Entrega a domicilio</h4><p>En toda la ciudad, mismo día</p></div>
+  <div class="feature"><div class="feature-icon">🎨</div><h4>Diseño personalizado</h4><p>Hacemos tus sueños realidad</p></div>
+  <div class="feature"><div class="feature-icon">💝</div><h4>Para toda ocasión</h4><p>Bodas, cumpleaños y más</p></div>
+</div>
+
+<!-- CATALOG -->
+<section id="catalogo">
+  <div class="section-header">
+    <h2>Nuestro Catálogo</h2>
+    <p>Pasteles frescos elaborados diariamente con ingredientes de primera calidad.</p>
+  </div>
+  <div class="filters" id="filters"></div>
+  <div class="catalog" id="catalog">
+    <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">Cargando pasteles…</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="nosotros">
+  <p>© 2025 <strong>La Pastelería</strong> · Hecho con 🤍 y mucha azúcar · Todos los derechos reservados</p>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="overlay" id="overlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h2>🛒 Tu carrito</h2>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span>Total</span>
+      <strong id="cartTotal">$0.00</strong>
+    </div>
+    <button class="checkout-btn" onclick="openCheckout()">Confirmar pedido →</button>
+  </div>
+</div>
+
+<!-- REVIEWS MODAL -->
+<div class="modal-bg" id="reviewModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="reviewModalTitle">Reseñas</h3>
+      <button class="close-btn" onclick="closeReviews()">✕</button>
+    </div>
+    <div class="modal-body" id="reviewModalBody"></div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-bg" id="checkoutModal">
+  <div class="modal checkout-modal">
+    <div class="modal-head">
+      <h3>Confirmar pedido</h3>
+      <button class="close-btn" onclick="closeCheckout()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="review-form">
+        <h4>Datos de entrega</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" id="chkNombre" placeholder="Tu nombre"/>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="chkEmail" placeholder="tu@email.com"/>
+          </div>
+        </div>
+        <div id="checkoutSummary" style="margin-bottom:.8rem"></div>
+        <button class="submit-review" style="width:100%;padding:.9rem" onclick="submitPedido()">🎂 Realizar pedido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'http://localhost:3000/api';
+
+// ── STATE ──────────────────────────────────────
+let cart = JSON.parse(localStorage.getItem('cart') || '[]'); // [{id, nombre, precio, emoji, cantidad}]
+let currentReviewProduct = null;
+let selectedStars = 0;
+
+// ── TOAST ──────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── STARS RENDER ──────────────────────────────
+function renderStars(n, max=5) {
+  return '★'.repeat(Math.round(n)) + '☆'.repeat(max - Math.round(n));
+}
+
+// ── CATALOG ───────────────────────────────────
+async function loadCatalog(categoria = 'Todos') {
+  const url = categoria === 'Todos' ? `${API}/productos` : `${API}/productos?categoria=${encodeURIComponent(categoria)}`;
+  try {
+    const res  = await fetch(url);
+    const data = await res.json();
+    renderCatalog(data);
+  } catch {
+    document.getElementById('catalog').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">⚠️ No se pudo conectar al servidor.<br><small>Asegúrate de que el backend esté corriendo.</small></div>`;
+  }
+}
+
+function renderCatalog(productos) {
+  const el = document.getElementById('catalog');
+  if (!productos.length) { el.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">No hay pasteles en esta categoría.</div>'; return; }
+  el.innerHTML = productos.map(p => {
+    const qty = (cart.find(c => c.id === p.id) || {}).cantidad || 1;
+    return `
+    <div class="card">
+      <div class="card-img" style="background:linear-gradient(135deg,${p.color_from},${p.color_to})">
+        ${p.emoji}
+        ${p.badge ? `<span class="card-badge">${p.badge}</span>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-cat">${p.categoria}</div>
+        <div class="stars-row">
+          <span class="stars">${renderStars(p.promedio_estrellas)}</span>
+          <span class="star-count">${p.promedio_estrellas > 0 ? p.promedio_estrellas : 'Sin reseñas'} ${p.total_resenas > 0 ? `(${p.total_resenas})` : ''}</span>
+        </div>
+        <h3>${p.nombre}</h3>
+        <p>${p.descripcion}</p>
+        <button class="review-toggle" onclick="openReviews(${p.id}, '${p.nombre.replace(/'/g,"\\'")}')">Ver reseñas →</button>
+        <div class="card-footer" style="margin-top:.9rem">
+          <span class="price">$${p.precio.toFixed(2)}</span>
+          <div style="display:flex;align-items:center;gap:.5rem">
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
+              <span class="qty-num" id="qty-${p.id}">${qty}</span>
+              <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+            </div>
+            <button class="add-btn" onclick="addToCart(${p.id}, '${p.nombre.replace(/'/g,"\\'")}', ${p.precio}, '${p.emoji}')">Agregar</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── FILTERS ───────────────────────────────────
+async function loadFilters() {
+  try {
+    const res  = await fetch(`${API}/productos`);
+    const data = await res.json();
+    const cats = ['Todos', ...new Set(data.map(p => p.categoria))];
+    const el   = document.getElementById('filters');
+    el.innerHTML = cats.map(c =>
+      `<button class="filter-btn ${c==='Todos'?'active':''}" onclick="filterBy(this,'${c}')">${c}</button>`
+    ).join('');
+  } catch {}
+}
+
+function filterBy(btn, cat) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadCatalog(cat);
+}
+
+// ── QUANTITY IN CARD ──────────────────────────
+function changeQty(id, delta) {
+  const el  = document.getElementById(`qty-${id}`);
+  const val = Math.max(1, (parseInt(el.textContent) || 1) + delta);
+  el.textContent = val;
+  // Si ya está en carrito, actualizar cantidad
+  const item = cart.find(c => c.id === id);
+  if (item) { item.cantidad = val; saveCart(); renderCartSidebar(); }
+}
+
+// ── CART ──────────────────────────────────────
+function addToCart(id, nombre, precio, emoji) {
+  const qty   = parseInt(document.getElementById(`qty-${id}`)?.textContent || 1);
+  const exist = cart.find(c => c.id === id);
+  if (exist) { exist.cantidad += qty; }
+  else { cart.push({ id, nombre, precio, emoji, cantidad: qty }); }
+  saveCart();
+  renderCartSidebar();
+  bumpCount();
+  showToast(`✓ ${nombre} agregado al carrito`);
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(c => c.id !== id);
+  saveCart();
+  renderCartSidebar();
+}
+
+function changeCartQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (!item) return;
+  item.cantidad = Math.max(1, item.cantidad + delta);
+  saveCart();
+  renderCartSidebar();
+}
+
+function saveCart() {
+  localStorage.setItem('cart', JSON.stringify(cart));
+  document.getElementById('cartCount').textContent = cart.reduce((s,i) => s+i.cantidad, 0);
+}
+
+function bumpCount() {
+  const el = document.getElementById('cartCount');
+  el.classList.remove('bump');
+  void el.offsetWidth;
+  el.classList.add('bump');
+  setTimeout(() => el.classList.remove('bump'), 300);
+}
+
+function renderCartSidebar() {
+  const el    = document.getElementById('cartItems');
+  const total = cart.reduce((s,i) => s + i.precio*i.cantidad, 0);
+  document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+  if (!cart.length) {
+    el.innerHTML = `<div class="cart-empty"><span>🛒</span>Tu carrito está vacío</div>`;
+    return;
+  }
+  el.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-emoji">${item.emoji}</div>
+      <div class="cart-item-info">
+        <h4>${item.nombre}</h4>
+        <p>$${(item.precio * item.cantidad).toFixed(2)}</p>
+      </div>
+      <div class="cart-item-qty">
+        <button onclick="changeCartQty(${item.id},-1)">−</button>
+        <span>${item.cantidad}</span>
+        <button onclick="changeCartQty(${item.id},1)">+</button>
+      </div>
+      <button class="remove-item" onclick="removeFromCart(${item.id})">✕</button>
+    </div>
+  `).join('');
+}
+
+function toggleCart() {
+  document.getElementById('cartSidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+
+// ── CHECKOUT ──────────────────────────────────
+function openCheckout() {
+  if (!cart.length) { showToast('Tu carrito está vacío'); return; }
+  const total = cart.reduce((s,i) => s+i.precio*i.cantidad, 0);
+  document.getElementById('checkoutSummary').innerHTML = `
+    <div style="background:var(--cream);border-radius:10px;padding:.8rem 1rem;margin-bottom:.8rem;font-size:.85rem;color:var(--muted)">
+      ${cart.map(i=>`<div style="display:flex;justify-content:space-between"><span>${i.emoji} ${i.nombre} ×${i.cantidad}</span><strong style="color:var(--brown)">$${(i.precio*i.cantidad).toFixed(2)}</strong></div>`).join('')}
+      <div style="border-top:1px solid #e8d8cc;margin-top:.6rem;padding-top:.6rem;display:flex;justify-content:space-between;font-weight:700;color:var(--brown)"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+    </div>`;
+  document.getElementById('checkoutModal').classList.add('open');
+}
+
+function closeCheckout() { document.getElementById('checkoutModal').classList.remove('open'); }
+
+async function submitPedido() {
+  const nombre = document.getElementById('chkNombre').value.trim();
+  const email  = document.getElementById('chkEmail').value.trim();
+  if (!nombre || !email) { showToast('Por favor completa todos los campos'); return; }
+  try {
+    const res = await fetch(`${API}/pedidos`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ cliente_nombre:nombre, cliente_email:email, items: cart.map(i=>({producto_id:i.id,cantidad:i.cantidad})) })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    cart = []; saveCart(); renderCartSidebar();
+    closeCheckout(); toggleCart();
+    showToast(`🎉 ¡Pedido #${data.pedido.id} confirmado!`);
+    loadCatalog();
+  } catch(e) { showToast(`❌ ${e.message}`); }
+}
+
+// ── REVIEWS ───────────────────────────────────
+async function openReviews(id, nombre) {
+  currentReviewProduct = id;
+  selectedStars = 0;
+  document.getElementById('reviewModalTitle').textContent = `Reseñas · ${nombre}`;
+  document.getElementById('reviewModal').classList.add('open');
+  await renderReviews(id);
+}
+
+async function renderReviews(id) {
+  const body = document.getElementById('reviewModalBody');
+  body.innerHTML = '<div style="text-align:center;padding:1rem;color:var(--muted)">Cargando…</div>';
+  try {
+    const res    = await fetch(`${API}/productos/${id}/resenas`);
+    const resenas = await res.json();
+    const reviewsHTML = resenas.length
+      ? resenas.map(r => `
+          <div class="review-card">
+            <div class="review-card-header">
+              <span class="review-author">${r.autor}</span>
+              <span class="review-date">${new Date(r.fecha).toLocaleDateString('es')}</span>
+            </div>
+            <div class="review-stars">${renderStars(r.estrellas)}</div>
+            ${r.comentario ? `<div class="review-text">${r.comentario}</div>` : ''}
+          </div>`).join('')
+      : `<div class="no-reviews">Aún no hay reseñas. ¡Sé el primero!</div>`;
+
+    body.innerHTML = reviewsHTML + `
+      <div class="review-form">
+        <h4>Dejar una reseña</h4>
+        <div class="form-group">
+          <label>Tu nombre</label>
+          <input type="text" id="rvAutor" placeholder="Nombre"/>
+        </div>
+        <div class="form-group">
+          <label>Calificación</label>
+          <div class="star-picker" id="starPicker">
+            ${[1,2,3,4,5].map(n=>`<span data-v="${n}" onclick="pickStar(${n})">★</span>`).join('')}
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Comentario (opcional)</label>
+          <textarea id="rvComentario" rows="3" placeholder="Cuéntanos qué te pareció…"></textarea>
+        </div>
+        <button class="submit-review" onclick="submitReview()">Publicar reseña</button>
+      </div>`;
+  } catch { body.innerHTML = '<div style="text-align:center;padding:1rem;color:var(--muted)">Error al cargar reseñas.</div>'; }
+}
+
+function pickStar(n) {
+  selectedStars = n;
+  document.querySelectorAll('#starPicker span').forEach(s => {
+    s.classList.toggle('lit', parseInt(s.dataset.v) <= n);
+  });
+}
+
+async function submitReview() {
+  const autor     = document.getElementById('rvAutor')?.value.trim();
+  const comentario = document.getElementById('rvComentario')?.value.trim();
+  if (!autor) { showToast('Por favor ingresa tu nombre'); return; }
+  if (!selectedStars) { showToast('Selecciona una calificación'); return; }
+  try {
+    const res = await fetch(`${API}/productos/${currentReviewProduct}/resenas`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ autor, estrellas:selectedStars, comentario })
+    });
+    if (!res.ok) throw new Error('Error al publicar');
+    showToast('✓ Reseña publicada, ¡gracias!');
+    await renderReviews(currentReviewProduct);
+    loadCatalog();
+  } catch { showToast('❌ No se pudo publicar la reseña'); }
+}
+
+function closeReviews() {
+  document.getElementById('reviewModal').classList.remove('open');
+  currentReviewProduct = null;
+}
+
+// ── INIT ──────────────────────────────────────
+saveCart();
+renderCartSidebar();
+loadFilters();
+loadCatalog();
+</script>
+</body>
+</html>
