@@ -1,4 +1,4 @@
-# 🎂 La Pastelería — Sitio Web Completo
+#  La Pastelería — Sitio Web Completo
 
 Aplicación web con catálogo, carrito de compras, reseñas por producto y sistema de pedidos.
 
@@ -17,7 +17,7 @@ pasteleria/
 
 ---
 
-## ⚡ Instalación y arranque
+## Instalación y arranque
 
 ### 1. Instalar dependencias del backend
 
@@ -81,7 +81,7 @@ POST /api/productos/1/resenas
 
 ---
 
-## ✨ Funcionalidades incluidas
+##  Funcionalidades incluidas
 
 - **Catálogo** con filtros por categoría
 - **Selector de cantidad** (+/−) por producto
@@ -93,7 +93,7 @@ POST /api/productos/1/resenas
 
 ---
 
-## 🚀 Próximos pasos sugeridos
+##  Próximos pasos sugeridos
 
 - Agregar autenticación con JWT
 - Panel de administración para gestionar productos y pedidos
